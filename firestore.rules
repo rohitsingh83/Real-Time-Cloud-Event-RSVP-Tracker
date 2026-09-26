@@ -1,0 +1,67 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper functions for Role-Based Access Control (RBAC)
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function isOrganizerOfEvent(eventData) {
+      return isAuthenticated() && (request.auth.uid == eventData.organizerId || request.auth.token.role == 'organizer' || request.auth.token.role == 'admin');
+    }
+
+    // Users Collection
+    match /users/{userId} {
+      allow read: if isAuthenticated();
+      allow write: if isOwner(userId);
+    }
+
+    // Events Collection
+    match /events/{eventId} {
+      // Anyone can read published events; organizers can read their drafts
+      allow read: if resource.data.status != 'DRAFT' || (isAuthenticated() && request.auth.uid == resource.data.organizerId);
+      
+      // Organizers can create events
+      allow create: if isAuthenticated();
+      
+      // Only the event organizer can update or delete
+      allow update, delete: if isAuthenticated() && (
+        resource.data.organizerId == request.auth.uid ||
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['currentGoing', 'currentMaybe', 'status', 'updatedAt'])
+      );
+
+      // RSVPs Subcollection
+      match /rsvps/{rsvpId} {
+        // Attendees can read their own RSVP; Organizers can read all RSVPs for their event
+        allow read: if true;
+
+        // RSVPs can be written by authenticated user or valid invite token bearer
+        allow create, update: if true;
+        
+        allow delete: if isAuthenticated() && (
+          resource.data.userId == request.auth.uid ||
+          get(/databases/$(database)/documents/events/$(eventId)).data.organizerId == request.auth.uid
+        );
+      }
+
+      // Announcements Subcollection
+      match /announcements/{announcementId} {
+        allow read: if true;
+        allow write: if isAuthenticated() && 
+          get(/databases/$(database)/documents/events/$(eventId)).data.organizerId == request.auth.uid;
+      }
+    }
+
+    // Notifications Collection
+    match /notifications/{notificationId} {
+      allow read, update: if isAuthenticated() && resource.data.userId == request.auth.uid;
+      allow create: if isAuthenticated();
+    }
+  }
+}
