@@ -24,9 +24,10 @@ export async function generateQRCode(text) {
  * Format public invite and check-in links
  */
 export function getInviteUrl(eventId, token) {
-  const origin = typeof window !== 'undefined' ? window.location.origin : 'https://cloud-rsvp-tracker.vercel.app';
+  const origin = typeof window !== 'undefined' ? window.location.origin + window.location.pathname : 'https://rohitsingh83.github.io/Real-Time-Cloud-Event-RSVP-Tracker';
+  const cleanOrigin = origin.endsWith('/') ? origin.slice(0, -1) : origin;
   if (token) {
-    return `${origin}/rsvp?e=${eventId}&t=${token}`;
+    return `${cleanOrigin}/#/rsvp?e=${eventId}&t=${token}`;
   }
-  return `${origin}/event/${eventId}`;
+  return `${cleanOrigin}/#/event/${eventId}`;
 }
