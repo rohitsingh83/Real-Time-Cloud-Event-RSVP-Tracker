@@ -2,10 +2,13 @@
 
 > **A high-concurrency, viral cloud event management platform featuring real-time RSVP synchronization, atomic race-condition prevention, frictionless token invitations, AI-powered turnout prediction, and on-site QR gate check-ins.**
 
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Visit%20Website-10b981?style=for-the-badge&logo=google-chrome&logoColor=white)](https://rohitsingh83.github.io/Real-Time-Cloud-Event-RSVP-Tracker/)
+[![GitHub Repo](https://img.shields.io/badge/GitHub-rohitsingh83-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/rohitsingh83/Real-Time-Cloud-Event-RSVP-Tracker)
+
 [![Cloud Architecture](https://img.shields.io/badge/Architecture-Cloud%20Native%20%7C%20Serverless-6366f1.svg)](#cloud-computing-architecture)
 [![Database](https://img.shields.io/badge/Database-Firestore%20%7C%20PostgreSQL-emerald.svg)](#cloud-database-design)
 [![Concurrency](https://img.shields.io/badge/Concurrency-ACID%20Transaction%20Safe-amber.svg)](#concurrency--race-condition-handling)
-[![Deploy](https://img.shields.io/badge/Deploy-Vercel%20%2B%20Firebase%20Free%20Tier-blue.svg)](#cloud-deployment-guide)
+[![Deploy](https://img.shields.io/badge/Deploy-GitHub%20Pages%20Live-blue.svg)](#cloud-deployment-guide)
 [![License](https://img.shields.io/badge/License-MIT-purple.svg)](#license)
 
 ---
